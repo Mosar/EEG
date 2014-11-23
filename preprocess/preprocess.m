@@ -9,7 +9,8 @@ function preprocessed_data = preprocess(raw_data, n, to_cut_steps, output_name, 
     
     for i = 1: size(labels(:,1))
         if n.EVENT.TYP(i) == 769 | n.EVENT.TYP(i) == 770 | n.EVENT.TYP(i) == 771 | n.EVENT.TYP(i) == 772
-            class((n.EVENT.POS(i)+to_cut_steps):(n.EVENT.POS(i)+n.EVENT.DUR(i))) = ones(n.EVENT.DUR(i)+1 - to_cut_steps, 1).*(772+1-n.EVENT.TYP(i));
+            %class((n.EVENT.POS(i)+to_cut_steps):(n.EVENT.POS(i)+n.EVENT.DUR(i))) = ones(n.EVENT.DUR(i)+1 - to_cut_steps, 1).*(772+1-n.EVENT.TYP(i));
+            class((n.EVENT.POS(i)+to_cut_steps):(n.EVENT.POS(i)+n.EVENT.DUR(i) - 1)) = ones(n.EVENT.DUR(i) - to_cut_steps, 1).*(772+1-n.EVENT.TYP(i));
         end
     end   
     
