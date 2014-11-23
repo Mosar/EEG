@@ -1,4 +1,4 @@
-function preprocessed_data = preprocess(raw_data, n, to_cut_steps, output_name, save_to_file)
+function preprocessed_data = preprocess(raw_data, n, to_cut_steps, output_name, save_to_file, extract_trials)
     %[raw,n] = read_data('A03T.GDF');
     %Example : preprocessed_data = preprocess_data(raw, n, 0, 'A03T.csv', 1); 
     %
@@ -17,10 +17,13 @@ function preprocessed_data = preprocess(raw_data, n, to_cut_steps, output_name, 
     %preprocessed_data = [raw_data, class];
     preprocessed_data = raw_data;
     
-    bandpower_data = bandpower(preprocessed_data(:,1:25), 250, [12, 16], 1, 4);
+    %bandpower_data = bandpower(preprocessed_data(:,1:25), 250, [12, 16], 1, 4);
+    bandpower_data = bandpower(preprocessed_data(:,1:25), 250, [8, 12], 1, 4);
     
     preprocessed_data = [bandpower_data, class];
-    preprocessed_data = preprocessed_data(preprocessed_data(:, 26) ~= 0, :);
+   
+    if extract_trials
+        preprocessed_data = preprocessed_data(preprocessed_data(:, 26) ~= 0, :);
     
     if save_to_file
         dlmwrite(['./data/', output_name], preprocessed_data, ',');
