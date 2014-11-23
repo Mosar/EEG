@@ -13,11 +13,15 @@ function preprocessed_data = preprocess(raw_data, n, to_cut_steps, output_name, 
         end
     end   
     
-    preprocessed_data = [raw_data, class];
+    %preprocessed_data = [raw_data, class];
+    preprocessed_data = raw_data;
     
+    bandpower_data = bandpower(preprocessed_data(:,1:25), 250, [12, 16], 1, 4);
+    
+    preprocessed_data = [bandpower_data, class];
     preprocessed_data = preprocessed_data(preprocessed_data(:, 26) ~= 0, :);
     
     if save_to_file
-        dlmwrite(['./data/', output_name], raw_data, ',');
+        dlmwrite(['./data/', output_name], preprocessed_data, ',');
     end
 end
