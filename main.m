@@ -1,9 +1,15 @@
+addpath('./classifyer', ...
+        './data', ...
+        './extract_features', ...
+        './preprocess', ...
+        './read')
+
 filenames = ['A03T'; 'A04T'; 'A05T'; 'A06T'];
 
 num = 1;
 filename = filenames(num,:);
 
-[data, n] = read_data([filename, '.GDF']);
+[data, n] = read_data([filename, '.gdf']);
 
 %Preprpcess arguments: 1, 2 - data. 
 % 3 - number of measurments to cut.
