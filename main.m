@@ -6,6 +6,9 @@ addpath('./classifyer', ...
 
 filenames = ['A03T'; 'A04T'; 'A05T'; 'A06T'];
 
+write_preprocessed_to_file = 0;
+write_features_to_file = 1;
+
 num = 1;
 filename = filenames(num,:);
 
@@ -18,4 +21,9 @@ filename = filenames(num,:);
 % 6 - extract trials (1) or not (0) - cut only those parts of signal,
 % that refer to motor imagery.
 preprocessed_data = preprocess(data, n, 313, [filename, '.csv'], 0, 1);
+feature_matrix = extract_features(preprocessed_data);
 
+
+if write_features_to_file
+	dlmwrite(['./data/', filename, '.preprocessed.csv'], feature_matrix, ',');
+end

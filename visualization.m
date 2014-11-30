@@ -3,7 +3,7 @@ filenames = ['A03T'; 'A04T'; 'A05T'; 'A06T'];
 num = 1;
 filename = filenames(num,:);
 
-[data, n] = read_data([filename, '.GDF']);
+[data, n] = read_data([filename, '.gdf']);
 
 preprocessed_data = preprocess(data, n, 0, [filename, '.csv'], 0, 0);
 
@@ -38,5 +38,15 @@ surface([x;x],[y;y],[z;z],[col;col],...
         'facecol','no',...
         'edgecol','interp',...
         'linew',2);
-
+    if 0 == 1
+    figure
+    plot(1:72, fv((fv(:,2) == 1),1), 'r')
+    plot(1:72, fv((fv(:,2) == 2),1))
+    plot(1:72, fv((fv(:,2) == 3),1), 'g')
+    plot(1:72, fv((fv(:,2) == 4),1), 'black')
+    hold
+    end
 end
+
+
+

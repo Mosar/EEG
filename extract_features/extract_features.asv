@@ -23,20 +23,29 @@ function feature_vector = extract_features(preprocessed_data)
     trials = 288;
     % KOSTYL END
     
+    
+    norm(V*class1Matrix')^2
+    norm(V*class2Matrix')^2
+    norm(V*class3Matrix')^2
+    norm(V*class4Matrix')^2
+    
     feature_vector = [];
     
     for i = 0:(trials - 1)
         lower = stepSize*i + 1;
         upper = stepSize*(i+1);
         tmp = [];
-        for t = 1 : numel(VS)
-            V = VS{t};
-            tmp = [tmp, norm(V*preprocessed_data(lower:upper, 1:25)')^2]; 
-        end    
+        for V = 1:size(VS,2)
+            V = VS(t)
+            tmp = [tmp, norm(V*preprocessed_data(lower:upper, 1:25)')^2] 
+            
         tmp = [tmp, preprocessed_data(lower+1, 26)];
-        
         feature_vector = [feature_vector; tmp];
-             
-    end
         
+                            
+        
+         
+    end
+    
+    
   end
