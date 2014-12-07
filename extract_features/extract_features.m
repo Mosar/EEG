@@ -6,8 +6,9 @@ function feature_vector = extract_features(preprocessed_data)
     class2Matrix = preprocessed_data(preprocessed_data(:,26) == 2, 1:25);
     class3Matrix = preprocessed_data(preprocessed_data(:,26) == 3, 1:25);
     class4Matrix = preprocessed_data(preprocessed_data(:,26) == 4, 1:25);
-    
-    
+
+    %     % BioSig CSP
+    %     [V1_2, ~] = csp_fixed_biosig(class1Matrix, class2Matrix);
     
     [V1_2] = csp2type(class1Matrix', class2Matrix');
     [V1_3] = csp2type(class1Matrix', class3Matrix');
