@@ -2,12 +2,22 @@ function feature_vector = extract_features(preprocessed_data, trialSize, trials)
     
     classColumn = size(preprocessed_data, 2);
     
+<<<<<<< HEAD
     
     class1Matrix = preprocessed_data(preprocessed_data(:,classColumn) == 1, 1:(classColumn-1));
     class2Matrix = preprocessed_data(preprocessed_data(:,classColumn) == 2, 1:(classColumn-1));
     class3Matrix = preprocessed_data(preprocessed_data(:,classColumn) == 3, 1:(classColumn-1));
     class4Matrix = preprocessed_data(preprocessed_data(:,classColumn) == 4, 1:(classColumn-1));
     
+=======
+    class1Matrix = preprocessed_data(preprocessed_data(:,26) == 1, 1:25);
+    class2Matrix = preprocessed_data(preprocessed_data(:,26) == 2, 1:25);
+    class3Matrix = preprocessed_data(preprocessed_data(:,26) == 3, 1:25);
+    class4Matrix = preprocessed_data(preprocessed_data(:,26) == 4, 1:25);
+
+    %     % BioSig CSP
+    %     [V1_2, ~] = csp_fixed_biosig(class1Matrix, class2Matrix);
+>>>>>>> 7205d845f204415b4f1acc90ce37657e39f876d4
     
     [V1_2] = csp2type(class1Matrix', class2Matrix');
     [V1_3] = csp2type(class1Matrix', class3Matrix');
