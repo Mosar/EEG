@@ -1,12 +1,12 @@
-function feature_vector = extract_features(preprocessed_data)
-    classColumn = 26;
+function feature_vector = extract_features(preprocessed_data, trialSize, trials)
+    
+    classColumn = size(preprocessed_data, 2);
     
     
-    class1Matrix = preprocessed_data(preprocessed_data(:,26) == 1, 1:25);
-    class2Matrix = preprocessed_data(preprocessed_data(:,26) == 2, 1:25);
-    class3Matrix = preprocessed_data(preprocessed_data(:,26) == 3, 1:25);
-    class4Matrix = preprocessed_data(preprocessed_data(:,26) == 4, 1:25);
-    
+    class1Matrix = preprocessed_data(preprocessed_data(:,classColumn) == 1, 1:(classColumn-1));
+    class2Matrix = preprocessed_data(preprocessed_data(:,classColumn) == 2, 1:(classColumn-1));
+    class3Matrix = preprocessed_data(preprocessed_data(:,classColumn) == 3, 1:(classColumn-1));
+    class4Matrix = preprocessed_data(preprocessed_data(:,classColumn) == 4, 1:(classColumn-1));
     
     
     [V1_2] = csp2type(class1Matrix', class2Matrix');
@@ -20,8 +20,10 @@ function feature_vector = extract_features(preprocessed_data)
     
     % KOSTYL!!!
     stepSize = 500;
-    trials = 288;
+    % trials = 288;
     % KOSTYL END
+    
+    % Cross spectre
     
     feature_vector = [];
     
@@ -31,9 +33,9 @@ function feature_vector = extract_features(preprocessed_data)
         tmp = [];
         for t = 1 : numel(VS)
             V = VS{t};
-            tmp = [tmp, norm(V*preprocessed_data(lower:upper, 1:25)')^2]; 
+            tmp = [tmp, norm(V*preprocessed_data(lower:upper, 1:(classColumn-1))')^2]; 
         end    
-        tmp = [tmp, preprocessed_data(lower+1, 26)];
+        tmp = [tmp, preprocessed_data(lower+1, classColumn)];
         
         feature_vector = [feature_vector; tmp];
              

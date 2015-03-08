@@ -20,9 +20,16 @@ filename = filenames(num,:);
 % 5 - write to file (1) or not (0)
 % 6 - extract trials (1) or not (0) - cut only those parts of signal,
 % that refer to motor imagery.
-preprocessed_data = preprocess(data, n, 313, [filename, '.csv'], 0, 1);
-feature_matrix = extract_features(preprocessed_data);
+% class column goes last
+[preprocessed_data, trials_left] = preprocess(data, n, 313, [filename, '.csv'], 0, 1);
 
+% extract features arguments
+% 1 - data
+% 2 - trial size, 500 default
+% 3 - #of trials
+%
+
+feature_matrix = extract_features(preprocessed_data, 500, trials_left);
 
 if write_features_to_file
 	dlmwrite(['./data/', filename, '.preprocessed.csv'], feature_matrix, ',');
