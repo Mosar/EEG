@@ -1,4 +1,4 @@
-function [ preprocessed_deep, y ] = preprocess_deep (raw_data, n, to_cut_steps, output_name, save_to_file, extract_trials)
+function [ preprocessed_deep, y2 ] = preprocess_deep (raw_data, n, to_cut_steps, normalize, output_name, save_to_file, extract_trials)
     
     labels = [n.EVENT.TYP, n.EVENT.POS, n.EVENT.DUR];
 
@@ -7,15 +7,20 @@ function [ preprocessed_deep, y ] = preprocess_deep (raw_data, n, to_cut_steps, 
     artifact = false;
     
     trials_left = 0;
-    
 
     usefulColumnsEnd = 22;    
     
     preprocessed_data = raw_data(:, 1:usefulColumnsEnd);
-
+    
+    
+    if normalize
+        preprocessed_data = (preprocessed_data + min(preprocessed_data(:)) ) / (max(preprocessed_data(:)) + min(preprocessed_data(:)));
+    end
+    
 %    %bandpower_data = bandpower(preprocessed_data(:,1:25), 250, [12, 16], 1, 4);
-%    bandpower_data = bandpower(preprocessed_data(:,1:usefulColumnsEnd), 250, [8, 12], 1, 4);
-%    preprocessed_data = bandpower_data;
+    %bandpower_data = bandpower(preprocessed_data(:,1:usefulColumnsEnd), 250, [8, 12], 1, 4);
+    bandpower_data = bandpower(preprocessed_data, 250, [8, 12], 1, 4);
+    preprocessed_data = bandpower_data;
     
     preprocessed_deep = [];
     
@@ -52,5 +57,11 @@ function [ preprocessed_deep, y ] = preprocess_deep (raw_data, n, to_cut_steps, 
         dlmwrite(['./data/', output_name], preprocessed_data, ',');
     end
     
+    y2 = [];
+    for i = 1:length(y)
+        tmp = [0,0,0,0];
+        tmp(y(i)) = 1;
+        y2 = [y2; tmp];
+    end
 end
 
