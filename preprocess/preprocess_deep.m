@@ -14,7 +14,11 @@ function [ preprocessed_deep, y2 ] = preprocess_deep (raw_data, n, to_cut_steps,
     
     
     if normalize
-        preprocessed_data = (preprocessed_data + min(preprocessed_data(:)) ) / (max(preprocessed_data(:)) + min(preprocessed_data(:)));
+        %preprocessed_data = (preprocessed_data + min(preprocessed_data(:)) ) / (max(preprocessed_data(:)) + min(preprocessed_data(:)));
+        
+        for i = 1:size(preprocessed_data, 2);
+            preprocessed_data(:, i) = (preprocessed_data(:, i) + abs(min(preprocessed_data(:, i)))) / (max(preprocessed_data(:, i)) + abs(min(preprocessed_data(:, i))));
+        end
     end
     
 %    %bandpower_data = bandpower(preprocessed_data(:,1:25), 250, [12, 16], 1, 4);
