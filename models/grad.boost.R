@@ -1,33 +1,29 @@
-### Gradient boosting for angle and axis
-### Return RMSE for our prediction
-
+### Gradient boosting
 #library(gbm)
+library(xgboost)
 
-grad.boost <- function(data.emg, data.angle, data.axis, training.set, test.set, Ntree, depth){
-    data.emg.train <- as.data.frame( data.emg[training.set,])
-    data.emg.test <- as.data.frame( data.emg[test.set,] )
-    gbm.angle <- gbm(data.angle[training.set,1] ~ . , 
-                    data = data.emg.train, n.trees = Ntree,
-                     shrinkage = 10/Ntree, cv.folds = 5, verbose = TRUE,
-                     interaction.depth = depth) 
+grad.boost <- function(data.train.class, data.test.class,
+                       data.train.features, data.test.features,
+                       Ntree, depth){
+    
+    gbm.class <- xgboost(data = as.matrix(data.train.features), 
+                         label = as.matrix(data.train.class),
+                         max.depth = 3, eta = 1, nround = 1000, 
+                         objective = "binary:logistic")
+        
+#     gbm.class <- gbm(data.train.class ~ . , 
+#                      data = data.train.features, n.trees = Ntree,
+#                      shrinkage = 10/Ntree, cv.folds = 5, verbose = TRUE,
+#                      interaction.depth = depth)
+    
+    gbm.class.predict <- predict(gbm.class, as.matrix(data.test.features))
+#     gbm.class.predict <- predict(gbm.class, data.test.features, type='response')
 
-    best.iter <- gbm.perf(gbm.angle, method="OOB")
-    gbm.angle.predict <- predict(gbm.angle, data.emg.test, best.iter)
-    RMSE.gbm.angle <- mmetric(y = data.angle[test.set,1], x = 
-                               gbm.angle.predict, metric = 'RMSE')
-
-    gbm.axis.predict <- matrix(NA, dim(data.emg.test)[1], 3)
-    for (i in 1:dim(data.axis)[2]){
-        gbm.axis <- gbm(data.axis[training.set,i] ~ . , 
-                        data = data.emg.train, n.trees = Ntree,
-                        shrinkage = 10/Ntree, cv.folds = 5, verbose = TRUE,
-                        interaction.depth = depth) 
-        gbm.axis.predict[,i] <- predict(gbm.axis, data.emg.test)
-    }
-
-    RMSE.gbm.axis <- sapply(1:3, function(i) {mmetric(y = data.axis[test.set,i], x = 
-                                                         gbm.axis.predict[,i], metric = 'RMSE') } )
-
-    #plot(gbm.angle.predict, data.angle[test.set,1])
-    return( list(RMSE.gbm.angle = RMSE.gbm.angle, RMSE.gbm.axis = RMSE.gbm.axis) )
+#     gbm.class.predict = round(gbm.class.predict * 3) + 1
+    print(gbm.class.predict)
+    print(data.test.class)
+    
+    gbm.cm = confusionMatrix(data=gbm.class.predict, reference=data.test.class,
+                             positive = NULL, dnn = c("Prediction", "Reference"))
+    return( list(cm = gbm.cm) )
 }
