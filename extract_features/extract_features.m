@@ -16,6 +16,8 @@ function feature_vector = extract_features(preprocessed_data, trialSize, trials)
     [V2_3] = csp2type(class2Matrix', class3Matrix');
     [V2_4] = csp2type(class2Matrix', class4Matrix');
     [V3_4] = csp2type(class3Matrix', class4Matrix');
+
+    %   To do: Add one vs all CSP data.
     
     VS = {V1_2; V1_3; V1_4; V2_3; V2_4; V3_4};
     

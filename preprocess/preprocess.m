@@ -52,6 +52,7 @@ function [preprocessed_data, trials_left] = preprocess(raw_data, n, to_cut_steps
    
     if extract_trials
         preprocessed_data = preprocessed_data(preprocessed_data(:, classColumn) ~= 0, :);
+    end
     
     if save_to_file
         dlmwrite(['./data/', output_name], preprocessed_data, ',');
