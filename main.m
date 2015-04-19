@@ -5,7 +5,8 @@ clc;
 %% Configuration
 config = struct;
 % config.method = 'Common Spatial Pattern';
-config.method = 'Deep Belief Network';
+% config.method = 'Deep Belief Network';
+config.method = 'Deep Belief CSP';
 
 %% Initialization
 addpath('./classifyer', ...
@@ -43,8 +44,26 @@ switch config.method
         % 3 - #of trials
 
         feature_matrix = extract_features(preprocessed_data, 500, trials_left);
-    
+
     case 'Deep Belief CSP'
+
+        % Number of counts from the beginning to be cut 
+        config.preproc.cnts_to_cut    = 313;
+        % Name of output file
+        config.preproc.write_to_file  = true;
+        config.preproc.filename       = [filename, '.csv'];
+        % Extract only labeled data (what refer to motor imaginary)
+        config.preproc.extract_trials = true;
+        
+        [preprocessed_data, trials_left] = preprocess(data, n, config.preproc);
+
+        % Extract features arguments
+        % 1 - data
+        % 2 - trial size, 500 default
+        % 3 - #of trials
+
+        feature_matrix = extract_features(preprocessed_data, 500, trials_left);
+        
         X = feature_matrix(:, 1:6);
         Y = feature_matrix(:, 7);
         
@@ -69,10 +88,11 @@ switch config.method
         opts = struct;
         
         %% Train DBN
-        dbn.sizes = [50 40 30 20];
+        %dbn.sizes = [50 50 50 50 50 50];
+        dbn.sizes = [20];
         opts.numepochs =  100;
         opts.batchsize =  27;
-        opts.momentum  =  0.1;
+        opts.momentum  =  0.01;
 %         opts.alpha     =  1;
         opts.alpha     =  0.05;
         dbn = dbnsetup(dbn, train_x, opts);
@@ -83,7 +103,7 @@ switch config.method
         nn.activation_function = 'sigm';
 
         %% Train NN
-        opts.numepochs =  50;
+        opts.numepochs =  100;
         opts.batchsize = 27;
         nn = nntrain(nn, train_x, train_y, opts);
 
